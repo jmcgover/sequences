@@ -13,31 +13,6 @@ def get_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument('index', type=int, help='the term number or index to print the value of')
     return parser
 
-class Memoized():
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-    def __call__(self, *args):
-        if not isinstance(args, typing.Hashable):
-            # Some objects, e.g. immutable ones like lists, are not hashable, so
-            # we just return the executed function value.
-            return self.func(*args)
-        value = self.func(*args)
-        self.cache[args] = value
-        return value
-    def __repr_(self):
-        return self.func.__doc__
-    def __get__(self, obj, objtype):
-        return functools.partial(self.__call__, obj)
-
-_FIB_MEM= {}
-def fibonacci_memoized(n: int) -> int:
-    if n in _FIB_MEM:
-        return _FIB_MEM[n]
-    val = fibonacci(n)
-    _FIB_MEM[n] = val
-    return val
-
 def fibonacci(n):
     if n == 0:
         return 0
@@ -48,7 +23,7 @@ def fibonacci(n):
 def main() -> int:
     parser = get_arg_parser()
     args = parser.parse_args()
-    cProfile.runctx('print(fibonacci(args.index))', globals(), locals(), filename=None)
+    print(fibonacci(args.index))
     return 0
 
 if __name__ == '__main__':
