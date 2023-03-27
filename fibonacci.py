@@ -1,10 +1,11 @@
 #! /usr/bin/env python3
 
+import argparse
+import cProfile
 import functools
 import typing
-
 import sys
-import argparse
+
 
 _DESCRIPTION='A tool to print the Fibonacci Sequence or evaluate a value at a specific index.'
 def get_arg_parser() -> argparse.ArgumentParser:
@@ -29,8 +30,15 @@ class Memoized():
     def __get__(self, obj, objtype):
         return functools.partial(self.__call__, obj)
 
+_FIB_MEM= {}
+def fibonacci_memoized(n: int) -> int:
+    if n in _FIB_MEM:
+        return _FIB_MEM[n]
+    val = fibonacci(n)
+    _FIB_MEM[n] = val
+    return val
 
-def fibonacci(n: int) -> int:
+def fibonacci(n):
     if n == 0:
         return 0
     if n == 1:
@@ -40,7 +48,7 @@ def fibonacci(n: int) -> int:
 def main() -> int:
     parser = get_arg_parser()
     args = parser.parse_args()
-    print(fibonacci(args.index))
+    cProfile.runctx('print(fibonacci(args.index))', globals(), locals(), filename=None)
     return 0
 
 if __name__ == '__main__':
