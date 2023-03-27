@@ -9,11 +9,12 @@ import sys
 
 _DESCRIPTION='A tool to print the Fibonacci Sequence or evaluate a value at a specific index.'
 def get_arg_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog=sys.argv[0], description=_DESCRIPTION)
-    parser.add_argument('index', type=int, help='the term number or index to print the value of')
+    parser = argparse.ArgumentParser(prog = sys.argv[0], description = _DESCRIPTION)
+    parser.add_argument('index', type = int, help = 'the term number or index to print the value of')
+    parser.add_argument('-p','--print', help = 'print every value up to the specified index', action=argparse.BooleanOptionalAction)
     return parser
 
-def fibonacci(n):
+def fibonacci(n: int) -> int:
     if n == 0:
         return 0
     if n == 1:
@@ -23,7 +24,10 @@ def fibonacci(n):
 def main() -> int:
     parser = get_arg_parser()
     args = parser.parse_args()
-    print(fibonacci(args.index))
+    if args.print:
+        print('lol')
+    else:
+        print(fibonacci(args.index))
     return 0
 
 if __name__ == '__main__':
